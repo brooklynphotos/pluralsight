@@ -6,8 +6,8 @@ import "brooklyn.photos/pluralsight/printer/greeting"
 
 func main() {
 	// start getting data
-	routineDone := make(chan string)
 	codes := []string{"IN", "CH", "US"}
+	routineDone := make(chan string, len(codes))
 	for _, code := range codes {
 		go func(v string) {
 			routineOut := greeting.GetCountry(v)
@@ -19,13 +19,8 @@ func main() {
 	makeNoise(greeting.Child{"Bye", 2})
 	mi := greeting.MyInt(2)
 	makeNoise(mi)
-	count := 0
-	for s := range routineDone {
-		fmt.Println(s)
-		count += 1
-		if count == len(codes) {
-			close(routineDone)
-		}
+	for range codes {
+		fmt.Println(<-routineDone)
 	}
 }
 
