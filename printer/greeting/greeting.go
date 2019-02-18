@@ -11,7 +11,15 @@ type Salutation struct {
 }
 
 func Greet(sal Salutation, printer Printer) {
-	printer(CreateMessage(sal))
+	database := map[string]string{
+		"Bob": "Mr",
+		"Joe": "Dr",
+	}
+	if _, exists := database[sal.Name]; exists {
+		printer(CreateMessage(sal))
+	} else {
+		fmt.Println("Not there")
+	}
 }
 
 func CreateMessage(sal Salutation) string {
